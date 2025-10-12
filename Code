@@ -1,0 +1,45 @@
+#define LDR_PIN A0
+#define TRIG_PIN 9
+#define ECHO_PIN 8
+#define LIGHT_PIN 7
+
+const int LDR_THRESHOLD = 500;
+const int DISTANCE_THRESHOLD = 100;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(LDR_PIN, INPUT);
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  pinMode(LIGHT_PIN, OUTPUT);
+  digitalWrite(LIGHT_PIN, LOW);
+}
+
+void loop() {
+  int ldrValue = analogRead(LDR_PIN);
+  int distance = getDistance();
+
+  bool isDark = (ldrValue > LDR_THRESHOLD);
+  bool motionDetected = (distance > 0 && distance <= DISTANCE_THRESHOLD);
+
+  if (isDark && motionDetected) {
+    digitalWrite(LIGHT_PIN, HIGH);
+  } else {
+    digitalWrite(LIGHT_PIN, LOW);
+  }
+
+  delay(300);
+}
+
+int getDistance() {
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+
+  long duration = pulseIn(ECHO_PIN, HIGH);
+  int distance = duration * 0.034 / 2;
+  if (distance == 0 || distance > 400) return -1;
+  return distance;
+}
