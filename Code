@@ -3,8 +3,8 @@
 #define ECHO_PIN 8
 #define LIGHT_PIN 7
 
-const int LDR_THRESHOLD = 500;
-const int DISTANCE_THRESHOLD = 100;
+const int LDR_THRESHOLD = 550;
+const int DISTANCE_THRESHOLD = 110;
 
 void setup() {
   Serial.begin(9600);
@@ -28,7 +28,7 @@ void loop() {
     digitalWrite(LIGHT_PIN, LOW);
   }
 
-  delay(300);
+  delay(350);
 }
 
 int getDistance() {
